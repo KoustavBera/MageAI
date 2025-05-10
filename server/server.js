@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 await connectDB();
 app.get("/", (req, res) => {
-  res.send("API Working");
+  res.send("Backend is working!");
 });
 
 app.use("/api/user", userRouter);
