@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import { motion } from "framer-motion";
+import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { toast } from "react-toastify";
 const Login = () => {
@@ -12,15 +13,17 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (state === "Login") {
         const { data } = await axios.post(backendUrl + "/api/user/login", {
           email,
           password,
         });
+        setLoading(false);
         if (data.success) {
           setToken(data.token);
           setUser(data.user);
@@ -28,6 +31,7 @@ const Login = () => {
           setShowLogin(false);
         } else {
           console.log("error in data.success. Problem in backend");
+          setLoading(false);
           toast.error(data.message);
         }
       } else {
@@ -43,6 +47,8 @@ const Login = () => {
           localStorage.setItem("token", data.token);
           setShowLogin(false);
         } else {
+          setLoading(false);
+
           console.log("error in backend", data.message);
         }
       }
@@ -116,8 +122,13 @@ const Login = () => {
           >
             Forgot Password?
           </p>
+
           <button className="bg-blue-600 w-full text-white py-2 rounded-full ">
             {state === "Login" ? "login" : "create"}
+            {loading && (
+              <ClipLoader color="#ffff" size={20} className="ml-2 mt-1" />
+            )}
+            <span></span>
           </button>
 
           {state !== "Login" ? (
@@ -129,7 +140,7 @@ const Login = () => {
                   onClick={() => setstate("Login")}
                 >
                   {" "}
-                  Login{" "}
+                  Login
                 </span>
               </p>
               <img
