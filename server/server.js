@@ -9,7 +9,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://mage-ai-pied.vercel.app",
+    credentials: true,
+  })
+);
 await connectDB();
 app.get("/", (req, res) => {
   res.send("Backend is working!");
